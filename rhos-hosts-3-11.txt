@@ -1,0 +1,95 @@
+[OSEv3:children]
+masters
+nodes
+etcd
+glusterfs
+glusterfs_registry
+
+[OSEv3:vars]
+ansible_user=root
+ansible_become=true
+openshift_deployment_type=openshift-enterprise
+openshift_release="3.11"
+openshift_master_default_subdomain=apps.osmaster.ibmdte.com
+openshift_master_cluster_hostname=osmaster.ibmdte.com
+openshift_enable_docker_excluder=false
+openshift_enable_openshift_excluder=false
+openshift_enable_excluders=false
+
+# htpasswd auth
+openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
+
+# Basic Settings
+debug_level=9
+openshift_image_tag=v3.11.0
+openshift_pkg_version=-3.11.0
+system_images_registry="registry.redhat.io"
+openshift_master_image_policy_allowed_registries_for_import=["docker.io", "*.docker.io", "*.redhat.com", "gcr.io", "quay.io", "registry.centos.org", "registry.redhat.io", "*.amazonaws.com"]
+
+# Docker Info
+os_firewall_use_firewalld=True
+docker_version="1.13.1"
+openshift_docker_selinux_enabled=False
+openshift_hosted_registry_selector='node-role.kubernetes.io/infra=true'
+openshift_hosted_registry_cert_expire_days=3650
+
+os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
+osn_storage_plugin_deps=['ceph','glusterfs','iscsi']
+osm_cluster_network_cidr=10.128.0.0/14
+openshift_portal_net=172.30.0.0/16
+openshift_master_external_ip_network_cidrs=['0.0.0.0/0']
+openshift_master_ingress_ip_network_cidr=172.46.0.0/16
+openshift_master_console_port=8443
+openshift_enable_service_catalog=true
+template_service_broker_install=true
+openshift_service_catalog_image="registry.redhat.io/openshift3/ose-service-catalog:{{ openshift_image_tag }}"
+
+openshift_master_dynamic_provisioning_enabled=True
+openshift_clock_enabled=true
+
+# features
+openshift_cluster_monitoring_operator_install=true
+openshift_metrics_install_metrics=true
+openshift_metrics_cassandra_storage_type=dynamic
+openshift_logging_install_logging=true
+openshift_logging_es_pvc_dynamic=true
+openshift_logging_elasticsearch_storage_type=pvc
+openshift_logging_es_pvc_storage_class_name=glusterfs-storage
+openshift_enable_olm=true
+openshift_additional_registry_credentials=[{'host':'registry.connect.redhat.com','user':'jgnoonan1961','password':'Caesar@1990','test_image':'mongodb/enterprise-operator:0.3.2'}]
+
+##glusterfs
+openshift_storage_glusterfs_namespace=app-storage
+openshift_storage_glusterfs_storageclass=true
+openshift_storage_glusterfs_storageclass_default=true
+openshift_storage_glusterfs_block_deploy=true
+openshift_storage_glusterfs_block_host_vol_size=100
+openshift_storage_glusterfs_block_storageclass=true
+openshift_storage_glusterfs_block_storageclass_default=false
+
+#glusterfs-registry
+openshift_hosted_registry_storage_kind=glusterfs 
+openshift_hosted_registry_storage_volume_size=200Gi
+openshift_hosted_registry_selector='node-role.kubernetes.io/infra=true'
+
+[masters]
+osmaster.ibmdte.com
+
+[etcd]
+osmaster.ibmdte.com
+
+[nodes]
+osmaster.ibmdte.com openshift_node_group_name="node-config-master"
+osworker01.ibmdte.com openshift_node_group_name="node-config-compute"
+osworker02.ibmdte.com openshift_node_group_name="node-config-compute"
+osworker03.ibmdte.com openshift_node_group_name="node-config-compute"
+
+[glusterfs]
+osworker01.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+osworker02.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+osworker03.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+
+[glusterfs_registry]
+osworker01.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+osworker02.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+osworker03.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
