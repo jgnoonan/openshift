@@ -10,21 +10,22 @@ ansible_user=root
 ansible_become=true
 openshift_deployment_type=openshift-enterprise
 openshift_release="3.11"
-openshift_master_default_subdomain=cloudapps..ibmdte.com
-openshift_master_cluster_hostname=osmaster.ibmdte.com
-openshift_public_ip=169.63.244.236
+openshift_master_default_subdomain=cloudapps.ibmdte.com
+openshift_master_cluster_hostname=rhosmaster.ibmdte.com
+#openshift_set_node_ip=true
+openshift_node_problem_detector_install=true
 osm_cluster_network_cidr=10.128.0.0/14
 openshift_portal_net=172.30.0.0/16
-openshift_master_external_ip_network_cidrs=['0.0.0.0/0']
-openshift_master_ingress_ip_network_cidr=172.46.0.0/16
+openshift_master_api_port=8443
+openshift_master_console_port=8443
 
 # htpasswd auth
 openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 'challenge': 'true', 'kind': 'HTPasswdPasswordIdentityProvider'}]
 
 # Basic Settings
 debug_level=9
-openshift_image_tag=v3.11.98
-openshift_pkg_version=-3.11.98
+openshift_image_tag=v3.11.129
+openshift_pkg_version=-3.11.129
 system_images_registry="registry.redhat.io"
 openshift_master_image_policy_allowed_registries_for_import=["docker.io", "*.docker.io", "*.redhat.com", "gcr.io", "quay.io", "registry.centos.org", "registry.redhat.io", "*.amazonaws.com"]
 
@@ -32,21 +33,23 @@ openshift_master_image_policy_allowed_registries_for_import=["docker.io", "*.doc
 os_firewall_use_firewalld=True
 docker_version="1.13.1"
 openshift_docker_selinux_enabled=False
-openshift_hosted_registry_selector='node-role.kubernetes.io/infra=true'
+openshift_hosted_registry_selector='node-role.kubernetes.io/compute=true'
 openshift_hosted_registry_cert_expire_days=3650
 
 oreg_url=registry.redhat.io/openshift3/ose-${component}:${version}
 oreg_auth_user=11559946|jgnoonan1961
 oreg_auth_password=eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiIxNmRjNmNlZjA2OTU0NDA1YWQ1MjgwMjMzZGFjNmQ4ZCJ9.NbApNT5D_LQaCvjo-v3g7wGqReZjaiQdSRq1dhwLJOrmubmLNH6pfuoGqph_tKIIbUf7l42rgamdEsjfjczWhUS5M_awLEaAoF5lKCZZSSJgRJC2K3wRRiuRzEQPcdjBDmLVHJ40E-uJbdF8RjRajjsR85DMbYmrOEgAU0o54nFu-6vM9PbW-NTjesibhv0V4-yhv3MQ9tNedLJ07mvhFDol1Eav4qQc1Wy85Cg2N7XJ8oxQfFaOX50kd91wx_kiPFDiUCwE4lzMfB9Z8h6WrRcrkEepn6hAGF-NRTVQ3dbUUSHmqqYGc1PlIqEc59LwaE3cqxzyxzBWbam-nUzbLp8VEw02OVHPxvBlPlH3RMrB95vlLbgTxJgb5P69SqaY0DfZuODMag4MpiXKSaKmUzKZyQmuykhD7SGd-jJTdWWCI4-G2VqTMg7I2YK1PHOCwRSITkqVATzMBO9_WEnqe1gaeuC_1JuGQCG3QmkjF39s6NO7KPnH7GVA3GUcsQbJiEs-UaT5VYZ1vbwDZuFaWmdDxTcjGw1JYI1MevEfOnXTPRIw_OdkjPICWYQjrrZD4m0YJvOK4b4_n-lxNzCUgCJJxCC8wQcka_9e9PCKThtUlQn3kmLXYebUHUsNzk2f9xTDYEemyQQh9FvLHu-DB4JtMhoRoBNWRqVCK5XqE4k
-#openshift_docker_insecure_registries=docker-registry.default.svc:5000
-openshift_docker_additional_registried=docker-register.default.svc:5000
+openshift_docker_additional_registries=docker-register.default.svc:5000
 osn_storage_plugin_deps=['ceph','glusterfs','iscsi']
+os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
 openshift_enable_service_catalog=true
 template_service_broker_install=true
 openshift_service_catalog_image="registry.redhat.io/openshift3/ose-service-catalog:{{ openshift_image_tag }}"
 
 openshift_master_dynamic_provisioning_enabled=True
 openshift_clock_enabled=true
+openshift_router_selector=node-role.kubernetes.io/compute=true
+openshift_registry_selector=node-role.kubernetes.io/compute=true
 
 # features
 openshift_cluster_monitoring_operator_install=true
@@ -59,8 +62,8 @@ openshift_logging_install_logging=true
 openshift_logging_es_pvc_dynamic=true
 openshift_logging_elasticsearch_storage_type=pvc
 openshift_logging_es_pvc_storage_class_name=glusterfs-storage-block
-openshift_logging_es_ops_nodeselector={"node-role.kubernetes.io/infra":"true"}
-openshift_logging_es_nodeselector={"node-role.kubernetes.io/infra":"true"}
+openshift_logging_es_ops_nodeselector={"node-role.kubernetes.io/compute":"true"}
+openshift_logging_es_nodeselector={"node-role.kubernetes.io/compute":"true"}
 openshift_enable_olm=true
 openshift_additional_registry_credentials=[{'host':'registry.connect.redhat.com','user':'jgnoonan1961','password':'Caesar@1990','test_image':'mongodb/enterprise-operator:0.3.2'}]
 
@@ -69,7 +72,7 @@ openshift_storage_glusterfs_timeout=900
 openshift_storage_glusterfs_image=registry.redhat.io/rhgs3/rhgs-server-rhel7:v3.11
 openshift_storage_glusterfs_block_image=registry.redhat.io/rhgs3/rhgs-gluster-block-prov-rhel7:v3.11
 openshift_storage_glusterfs_heketi_image=registry.redhat.io/rhgs3/rhgs-volmanager-rhel7:v3.11
-openshift_storage_glusterfs_namespace=app-storage
+openshift_storage_glusterfs_namespace=default
 openshift_storage_glusterfs_storageclass=true
 openshift_storage_glusterfs_storageclass_default=false
 openshift_storage_glusterfs_block_deploy=true
@@ -83,23 +86,32 @@ openshift_hosted_registry_storage_volume_size=200Gi
 openshift_hosted_registry_selector='node-role.kubernetes.io/infra=true'
 
 [masters]
-osmaster.ibmdte.com
+rhosmaster.ibmdte.com
 
 [etcd]
-osmaster.ibmdte.com
+rhosmaster.ibmdte.com
 
 [nodes]
-osmaster.ibmdte.com openshift_node_group_name="node-config-master-infra"
-osworker01.ibmdte.com openshift_node_group_name="node-config-compute"
-osworker02.ibmdte.com openshift_node_group_name="node-config-compute"
-osworker03.ibmdte.com openshift_node_group_name="node-config-compute"
+rhosmaster.ibmdte.com   openshift_ip=169.62.169.115 openshift_node_group_name="node-config-master-infra"
+rhosworker01.ibmdte.com openshift_ip=10.186.194.140 openshift_node_group_name="node-config-compute"
+rhosworker02.ibmdte.com openshift_ip=10.186.194.136 openshift_node_group_name="node-config-compute"
+rhosworker03.ibmdte.com openshift_ip=10.186.194.137 openshift_node_group_name="node-config-compute"
+rhosworker04.ibmdte.com openshift_ip=10.186.194.157 openshift_node_group_name="node-config-compute"
+rhosworker05.ibmdte.com openshift_ip=10.186.194.150 openshift_node_group_name="node-config-compute"
+rhosworker06.ibmdte.com openshift_ip=10.186.194.144 openshift_node_group_name="node-config-compute"
 
 [glusterfs]
-osworker01.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
-osworker02.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
-osworker03.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+rhosworker01.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+rhosworker02.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+rhosworker03.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+rhosworker04.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+rhosworker05.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+rhosworker06.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
 
 [glusterfs_registry]
-osworker01.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
-osworker02.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
-osworker03.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+rhosworker01.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+rhosworker02.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+rhosworker03.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+rhosworker04.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+rhosworker05.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
+rhosworker06.ibmdte.com glusterfs_devices='[ "/dev/xvdf" ]'
