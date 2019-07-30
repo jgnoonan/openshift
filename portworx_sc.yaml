@@ -1,0 +1,12 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: portworx-shared-sc
+parameters:
+  priority_io: "high"
+  repl: "2"
+  secure: "false"
+  sharedv4: "true"
+provisioner: kubernetes.io/portworx-volume
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
