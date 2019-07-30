@@ -1,0 +1,64 @@
+apiVersion: projectcalico.org/v3
+kind: GlobalNetworkPolicy
+metadata:
+  name: allow-portworx-ports
+spec:
+  ingress:
+  - action: Allow
+    destination:
+      ports:
+      - 9001:9022
+    protocol: TCP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 9001:9022
+    protocol: UDP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 111
+    protocol: TCP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 111
+    protocol: UDP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 2049
+    protocol: TCP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 2049
+    protocol: UDP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 1110
+    protocol: TCP
+    source: {}
+  - action: Allow
+    destination:
+      ports:
+      - 1110
+    protocol: UDP
+    source: {}  
+  - action: Allow
+    destination:
+      ports:
+      - 4045
+    protocol: TCP
+    source: {}
+  order: 1900
+  selector: ibm.role in { 'worker_public' }
+  types:
+  - Ingress
