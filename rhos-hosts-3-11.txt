@@ -81,8 +81,9 @@ openshift_storage_glusterfs_block_storageclass=true
 openshift_storage_glusterfs_block_storageclass_default=false
 
 #glusterfs-registry
-openshift_hosted_registry_storage_kind=glusterfs 
-openshift_hosted_registry_storage_volume_size=200Gi
+openshift_hosted_registry_storage_kind=glusterfs
+openshift_hosted_registry_storageclass= glusterfs-storage
+openshift_hosted_registry_storage_volume_size=500Gi
 openshift_hosted_registry_selector='node-role.kubernetes.io/compute=true'
 
 [masters]
