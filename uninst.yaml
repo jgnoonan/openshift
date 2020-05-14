@@ -27,17 +27,17 @@
       shell:
         cp /etc/resolv.conf.orig /etc/resolv.conf
 
-    - name:  Remove gluster volume group
-      shell:
-            vgremove -y $(vgdisplay | grep vg_ | awk '{print $3}')
-
-    - name:  Remove gluster physical volume
-      shell:
-            pvremove -y /dev/xvde
-
-    - name:  Wipe glusterfs drive
-      shell:
-            wipefs --all --force /dev/xvde
+#    - name:  Remove gluster volume group
+#      shell:
+#            vgremove -y $(vgdisplay | grep vg_ | awk '{print $3}')
+#
+#    - name:  Remove gluster physical volume
+#      shell:
+#            pvremove -y /dev/xvde
+#
+#    - name:  Wipe glusterfs drive
+#      shell:
+#            wipefs --all --force /dev/xvde
 
     - name: Remove leftover local data
       shell:
@@ -47,6 +47,24 @@
         /var/lib/etcd \
         /etc/origin \
         /var/lib/origin \
+        /var/lib/dockershim \
+        /var/lib/docker/containers \
+        /var/lib/docker/image \
+        /var/lib/docker/network \
+        /var/lib/docker/overlay2 \
+        /var/lib/docker/plugins \
+        /var/lib/docker/swarm \
+        /var/lib/docker/tmp \
+        /var/lib/docker/trust \
+        /var/lib/docker/volumes \
+        /var/lib/heketi \
+        /var/lib/fluentd \
+        /var/lib/glusterd \
+        /var/lib/kubelet \
+        /var/lib/containers \
+        /var/lib/origin \
+        /var/lib/osd \
+        /var/lib/cni \
         /etc/sysconfig/atomic-* \
         /etc/pki/ca-trust/source/anchors/openshift* \
         /etc/openvswitch /var/log/openvswitch \
